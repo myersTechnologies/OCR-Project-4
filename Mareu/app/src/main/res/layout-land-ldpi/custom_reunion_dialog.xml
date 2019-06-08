@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/custom_reunion">
+
+    <EditText
+        android:id="@+id/subject_editText"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="Sujet de la réunion"/>
+    <TextView
+        android:id="@+id/txtView_time"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/subject_editText"
+        android:text="Heure"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/txtView_date"
+        android:layout_width="290dp"
+        android:layout_height="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/subject_editText"
+        android:text="Date"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        app:layout_constraintLeft_toRightOf="@+id/txtView_time" />
+    <EditText
+        android:id="@+id/place_editBox"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toBottomOf="@+id/txtView_time"
+        android:hint="Lieu de la réunion"/>
+    <EditText
+        android:id="@+id/participant_editText"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toBottomOf="@+id/place_editBox"
+        android:hint="Participants"/>
+
+</android.support.constraint.ConstraintLayout>
