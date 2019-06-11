@@ -23,15 +23,15 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_reunion_fab"
-        android:layout_width="65dp"
+        android:layout_width="45dp"
         android:layout_height="1000dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="5dp"
-        app:fabCustomSize="65dp"
+        android:layout_marginBottom="35dp"
+        app:fabCustomSize="45dp"
         android:backgroundTint="#FFFF4955"
         android:src="@drawable/ic_add_white_24dp"
-        app:maxImageSize="50dp"/>
+        app:maxImageSize="30dp"/>
 
 </android.support.constraint.ConstraintLayout>

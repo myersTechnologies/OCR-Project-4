@@ -37,7 +37,6 @@ public class ReunionListActivity extends AppCompatActivity {
     private ReunionListRecyclerViewAdapter adapter;
     private ReunionDialogs reunionDialogs;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,23 +64,19 @@ public class ReunionListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-
     private void addToFavorites(){
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(reunionList.size() < 10) {
                         reunionDialogs.createDialogToSetNewReunion();
-                        adapter.notifyDataSetChanged();
                     } else {
                         Toast.makeText(getApplicationContext(), "Delete some reunions", Toast.LENGTH_LONG).show();
                     }
+                    adapter.notifyDataSetChanged();
                 }
             });
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
