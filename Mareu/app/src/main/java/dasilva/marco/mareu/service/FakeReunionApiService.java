@@ -1,7 +1,7 @@
 package dasilva.marco.mareu.service;
 
 
-import android.widget.DatePicker;
+import android.util.Log;
 
 import dasilva.marco.mareu.model.Reunion;
 
@@ -19,6 +19,7 @@ public class FakeReunionApiService implements ReunionApiService {
     private List<Reunion> listOfReunions = new ArrayList<>();
     private Date date;
     private Date toCompare;
+    private static String[] sales = new String[]{"Sale 1", "Sale 2", "Sale 3", "Sale 4", "Sale 5", "Sale 6", "Sale 7", "Sale 8", "Sale 9", "Sale 10" };
 
     @Override
     public List<Reunion> getReunions() {
@@ -36,33 +37,61 @@ public class FakeReunionApiService implements ReunionApiService {
     }
 
     @Override
-    public void setListReunionByDate() {
+    public List<Reunion> setListReunionByDate(String choiceDate) {
+        ArrayList<Reunion> reunionByDate = new ArrayList<>();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date currentDate = null;
+        try {
+            currentDate = formatter.parse(choiceDate);
+        } catch (ParseException e) {
+            Log.d("Erros null", "CurrentDate");
+        }
+        for (Reunion reunion : listOfReunions){
+            Date date = null;
+            try{
+                date = formatter.parse(reunion.getDate());
+            } catch (ParseException e){
+
+            }
+
+            if (currentDate.toString().contains(date.toString())){
+                reunionByDate.add(reunion);
+            }
+        }
+
         Comparator<Reunion> dateComparator = new Comparator<Reunion>() {
             @Override
             public int compare(Reunion o1, Reunion o2) {
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                SimpleDateFormat compare = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                SimpleDateFormat compare = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 try {
-                    date = format.parse(o1.getDate());
-                    toCompare = compare.parse(o2.getDate());
+                    date = format.parse(o1.getDate() + " " + o1.getTime());
+                    toCompare = compare.parse(o2.getDate() + " " + o1.getTime());
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
                 return date.compareTo(toCompare);
             }
         };
-        Collections.sort(this.listOfReunions, dateComparator);
+        Collections.sort(reunionByDate, dateComparator);
+
+       return reunionByDate;
 
     }
 
     @Override
-    public void setListReunionByPlace() {
-        Comparator<Reunion> placeComparator = new Comparator<Reunion>() {
-            @Override
-            public int compare(Reunion o1, Reunion o2) {
-                return o1.getPlace().toLowerCase().compareTo(o2.getPlace().toLowerCase());
+    public List<Reunion> setListReunionByPlace(String place) {
+        ArrayList<Reunion> reunionByPlace = new ArrayList<>();
+        for (Reunion reunion : listOfReunions){
+            if (reunion.getPlace().contains(place)){
+                reunionByPlace.add(reunion);
             }
-        };
-        Collections.sort(this.listOfReunions, placeComparator);
+        }
+        return reunionByPlace;
+    }
+
+    @Override
+    public String[] getSales() {
+        return sales;
     }
 }

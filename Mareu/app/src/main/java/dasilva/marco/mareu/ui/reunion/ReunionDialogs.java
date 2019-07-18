@@ -1,18 +1,23 @@
 package dasilva.marco.mareu.ui.reunion;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import dasilva.marco.mareu.R;
 import dasilva.marco.mareu.di.DI;
@@ -22,17 +27,22 @@ import dasilva.marco.mareu.service.ReunionApiService;
 public class ReunionDialogs {
 
     private Context context;
-    private EditText subjectEditText, placeEditText, participantEditText;
+    private EditText subjectEditText, participantEditText;
+    private Spinner placeSpinner;
     private TextView timeTextView, dateTextView;
-    private String subject, date, heure, lieu, participants;
-    private TimePicker timePicker;
+    private String subject, lieu, participants;
+    private String  date;
+    private String heure;
     private ReunionApiService apiService;
+    private String[] sales;
+    private ArrayAdapter<String> spin_adapter;
+    private  DatePickerDialog datePickerDialog;
+    private  TimePickerDialog timePickerDialog;
 
     public ReunionDialogs(Context context){
         this.context = context;
         apiService = DI.getReunionApiService();
     }
-
 
     public void createDialogToSetNewReunion(){
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -43,116 +53,102 @@ public class ReunionDialogs {
         subjectEditText = (EditText) view.findViewById(R.id.subject_editText);
         timeTextView = (TextView) view.findViewById(R.id.txtView_time);
         dateTextView = (TextView) view.findViewById(R.id.txtView_date);
-        placeEditText = (EditText) view.findViewById(R.id.place_editBox);
+        placeSpinner = (Spinner) view.findViewById(R.id.place_Spinner);
         participantEditText = (EditText) view.findViewById(R.id.participant_editText);
+        sales = apiService.getSales();
+        spin_adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, sales);
+        spin_adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        placeSpinner.setAdapter(spin_adapter);
+
 
         setReunionDialog.setView(view);
         setReunionDialog.setTitle("Ajoutez une réunion");
         setReunionDialog.setPositiveButton("Ajouter", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                     getNewReunion();
             }
         });
         setReunionDialog.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                dialog.cancel();
+               date = "Date";
+               heure = "Heure";
             }
         });
+        Calendar calendar = Calendar.getInstance();
+        final int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        final int minute = calendar.get(Calendar.MINUTE);
+        final int day = calendar.get(Calendar.DAY_OF_MONTH);
+        final int month = calendar.get(Calendar.MONTH);
+        final int year = calendar.get(Calendar.YEAR);
         timeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                timePickerDialog();
+                timePickerDialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                        timeTextView.setText(hour + ":" + minute);
+                        heure = hour + ":" + minute;
+                    }
+                }, hour, minute, android.text.format.DateFormat.is24HourFormat(context));
+                timePickerDialog.show();
             }
+
         });
         dateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                datePickerDialog();
+                datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int mYear, int mMonth, int mDay) {
+
+                        dateTextView.setText(mDay + "/" + (mMonth +1) + "/" + mYear);
+                        date = mDay + "/" + (mMonth +1) + "/" + mYear;
+                    }
+                }, year, month, day);
+                datePickerDialog.show();
             }
         });
         setReunionDialog.show();
     }
 
-    private void timePickerDialog(){
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.time_picker, null);
-        AlertDialog.Builder setTimeDialog = new AlertDialog.Builder(context);
-        //view for timePicker dialog
-        timePicker = (TimePicker) view.findViewById(R.id.timePicker);
-        setTimeDialog.setView(view);
-        setTimeDialog.setTitle("Sélectionner l'heure");
-
-        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                heure = hourOfDay + "h:" + minute + "m";
-            }
-        });
-        setTimeDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (heure != null){
-                timeTextView.setText(heure);
-                }else {
-                    Toast.makeText(context, "Veuillez choisir l'heure", Toast.LENGTH_SHORT).show();
-                    timePickerDialog();
-                }
-            }
-        });
-        setTimeDialog.show();
-    }
-
-    private void datePickerDialog(){
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.date_picker, null);
-        AlertDialog.Builder setDateDialog = new AlertDialog.Builder(context);
-        DatePicker datePicker = (DatePicker) view.findViewById(R.id.datePicker);
-        setDateDialog.setView(view);
-        setDateDialog.setTitle("Sélectionner la date");
-        Calendar calendar = Calendar.getInstance();
-        datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_YEAR),
-                new DatePicker.OnDateChangedListener() {
-                    @Override
-                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        date = dayOfMonth + "/" + String.valueOf(monthOfYear + 1)  + "/" + year;
-                    }
-                });
-
-        setDateDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (date != null){
-                dateTextView.setText(date);
-                }else {
-                    datePickerDialog();
-                    Toast.makeText(context, "Veuillez choisir la date", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
-        setDateDialog.show();
-    }
-
-    private void getNewReunion(){
+    private void getNewReunion() {
         subject = subjectEditText.getText().toString();
-        lieu = placeEditText.getText().toString();
+        lieu = placeSpinner.getSelectedItem().toString();
         participants = participantEditText.getText().toString();
-        if (! lieu.isEmpty() && date != null && heure != null && ! subject.isEmpty() && ! participants.isEmpty()) {
+        String[] email = participants.split(", ");
+        int count = 0;
+        for (String emailAdress : email) {
+            if (date != null && heure != null && !subject.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(emailAdress).matches()) {
+                count++;
+            }
+        }
+        if (count == email.length) {
             Reunion reunion = new Reunion(Reunion.getRandomColorAvatar(), date, heure, lieu, subject, participants);
             apiService.addReunion(reunion);
+            date = "Date";
+            heure = "Heure";
         } else {
             Toast.makeText(context, "Veuillez remplir toutes les informations", Toast.LENGTH_SHORT).show();
             createDialogToSetNewReunion();
 
-            subjectEditText.setText(subject);
-            placeEditText.setText(lieu);
-            participantEditText.setText(participants);
-            dateTextView.setText(dateTextView.getText());
-            timeTextView.setText(timeTextView.getText());
 
+            subjectEditText.setText(subject);
+            participantEditText.setText(participants);
+            if (dateTextView.getText() != "Date") {
+                dateTextView.setText(date);
+            } else{
+                dateTextView.setText("Date");
+            }
+            if (timeTextView.getText() != "Heure") {
+                timeTextView.setText(heure);
+            } else {
+                dateTextView.setText("Heure");
+            }
+            placeSpinner.setSelection(spin_adapter.getPosition(lieu));
         }
     }
+
 }

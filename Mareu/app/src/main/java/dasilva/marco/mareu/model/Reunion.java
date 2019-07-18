@@ -1,9 +1,5 @@
 package dasilva.marco.mareu.model;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 import java.util.Random;
 
 import dasilva.marco.mareu.R;
@@ -73,4 +69,5 @@ public class Reunion {
     public String getDescription(){
         return name + " - " + date + " - " + time + " - "+ place;
     }
+
 }

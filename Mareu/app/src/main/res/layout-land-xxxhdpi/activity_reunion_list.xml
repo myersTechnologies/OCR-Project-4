@@ -32,6 +32,6 @@
         app:fabCustomSize="45dp"
         android:backgroundTint="#FFFF4955"
         android:src="@drawable/ic_add_white_24dp"
-        app:maxImageSize="30dp"/>
+        app:maxImageSize="35dp"/>
 
 </android.support.constraint.ConstraintLayout>

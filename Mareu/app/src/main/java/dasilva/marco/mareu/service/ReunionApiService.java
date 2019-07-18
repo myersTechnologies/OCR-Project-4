@@ -14,8 +14,10 @@ public interface ReunionApiService {
 
     void deleteReunion(Reunion reunion);
 
-    void setListReunionByDate();
+    List<Reunion> setListReunionByDate(String choiceDate);
 
-    void setListReunionByPlace();
+    List<Reunion> setListReunionByPlace(String place);
+
+    String[] getSales();
 
 }

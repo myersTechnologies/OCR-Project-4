@@ -9,10 +9,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import dasilva.marco.mareu.R;
-import dasilva.marco.mareu.di.DI;
+import dasilva.marco.mareu.events.DeleteReunionEvent;
 import dasilva.marco.mareu.model.Reunion;
-import dasilva.marco.mareu.service.ReunionApiService;
+
 
 import java.util.List;
 
@@ -20,12 +22,11 @@ public class ReunionListRecyclerViewAdapter extends RecyclerView.Adapter<Reunion
 
     private List<Reunion> reunionList;
     private Reunion reunion;
-    private ReunionApiService service;
 
 
-    public ReunionListRecyclerViewAdapter(List<Reunion> reunionList){
+
+    public ReunionListRecyclerViewAdapter( List<Reunion> reunionList){
         this.reunionList = reunionList;
-        service = DI.getReunionApiService();
     }
 
     @Override
@@ -43,9 +44,7 @@ public class ReunionListRecyclerViewAdapter extends RecyclerView.Adapter<Reunion
         viewHolder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Reunion deleteReunion = reunionList.get(i);
-                service.deleteReunion(deleteReunion);
-                notifyDataSetChanged();
+                EventBus.getDefault().post(new DeleteReunionEvent(reunion));
             }
         });
     }

@@ -13,6 +13,7 @@ import android.view.ViewParent;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.Before;
@@ -26,6 +27,7 @@ import dasilva.marco.mareu.di.DI;
 import dasilva.marco.mareu.model.Reunion;
 import dasilva.marco.mareu.service.ReunionApiService;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -33,12 +35,16 @@ import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
+import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
@@ -107,34 +113,35 @@ public class ReunionListActivityTest {
         //fill subject textView with String
         onView(withId(R.id.subject_editText)).inRoot(isDialog())
                 .check(matches(isDisplayed())).perform(replaceText("Répète"));
-        //fill place textView with String
-        onView(withId(R.id.place_editBox)).inRoot(isDialog())
-                .check(matches(isDisplayed())).perform(replaceText("Chalon"));
-        //fill partipants textView with email String
-        onView(withId(R.id.participant_editText)).inRoot(isDialog())
-                .check(matches(isDisplayed())).perform(replaceText("marco@lamzon.com"));
         // perform a click on textView to select time
         onView(withId(R.id.txtView_time)).inRoot(isDialog()).perform(click());
-        //check if time dialog is displayed with title text
-        onView(withText("Sélectionner l'heure")).inRoot(isDialog()).check(matches(isDisplayed()));
         //set time
-        onView(withId(R.id.timePicker)).inRoot(isDialog()).check(matches(isDisplayed())).perform(PickerActions.setTime(2, 10));
+        onView(withClassName(Matchers.equalTo(android.widget.TimePicker.class.getName()))).inRoot(isDialog())
+                .check(matches(isDisplayed())).perform(PickerActions.setTime(2, 10));
         //perform click on positive button
         onView(withText("OK")).inRoot(isDialog()).perform(click());
         //check if time textview matches with time string
         onView(withId(R.id.txtView_time)).inRoot(isDialog())
-                .check(matches(isDisplayed())).check(matches(withText("2h:10m")));
+                .check(matches(isDisplayed())).check(matches(withText("2:10")));
         //check if textview is displayed and perform a click on textview to set date
         onView(withId(R.id.txtView_date)).inRoot(isDialog()).check(matches(isDisplayed())).perform(click());
-        //check if date dialog is displayed with title text
-        onView(withText("Sélectionner la date")).inRoot(isDialog()).check(matches(isDisplayed()));
         // set date
-        onView(withId(R.id.datePicker)).inRoot(isDialog()).check(matches(isDisplayed())).perform(PickerActions.setDate(2019, 10, 10));
+        onView(withClassName(Matchers.equalTo(android.widget.DatePicker.class.getName())))
+                .perform(PickerActions.setDate(2019, 10, 10));
         //perform click on positive button
         onView(withText("OK")).inRoot(isDialog()).perform(click());
         //check if date textView is filled with selected date
         onView(withId(R.id.txtView_date)).inRoot(isDialog())
                 .check(matches(isDisplayed())).check(matches(withText("10/10/2019")));
+        //set Reunion Place
+        onView(withId(R.id.place_Spinner)).perform(click());
+        onData(allOf(is(instanceOf(String.class)),
+                is("Sale 2"))).inRoot(isPlatformPopup()).perform(click());
+        //check if spinner selection equals to user selected place
+        onView(withId(R.id.place_Spinner)).check(matches(withSpinnerText(containsString("Sale 2"))));
+        //fill partipants textView with email String
+        onView(withId(R.id.participant_editText)).inRoot(isDialog())
+                .check(matches(isDisplayed())).perform(replaceText("marco@lamzon.com"));
         //perform a click on positive button and add reunion
         onView(withText("Ajouter")).inRoot(isDialog()).perform(click());
         //check if reunion is displayed with email string
@@ -163,7 +170,7 @@ public class ReunionListActivityTest {
     }
 
     @Test
-    public void ifReunionIfoIsNotCompletelyFilledWithAllInfo_createNewReunionDialogShouldReload(){
+    public void ifReunionInfoIsNotCompletelyFilledWithAllInfo_createNewReunionDialogShouldReload(){
         //check if FAB is displayed
         onView(allOf(withId(R.id.add_reunion_fab), childAtPosition(childAtPosition(
                 withId(android.R.id.content), 0), 2),
@@ -182,8 +189,9 @@ public class ReunionListActivityTest {
     }
 
     @Test
-    public void ifDateInDateDialogIsNull_dateDialogShouldReload(){
-        //check if fab is displayed
+    public void ifReunionParticipantsEmailDoesNotConatailsEmailChar_AddNewReunionDialogShouldReload(){
+        service.deleteReunion(reunion);
+        //Check if floating action button exists
         onView(allOf(withId(R.id.add_reunion_fab), childAtPosition(childAtPosition(
                 withId(android.R.id.content), 0), 2),
                 isDisplayed())).check(matches(isDisplayed()));
@@ -192,39 +200,45 @@ public class ReunionListActivityTest {
                 childAtPosition(childAtPosition(
                         withId(android.R.id.content), 0), 2),
                 isDisplayed())).perform(click());
-        //check if create new reunion dialog is displayed with dialog title text
+        //check if dialog tile in new reunion dialog is displayed
         onView(withText("Ajoutez une réunion")).inRoot(isDialog()).check(matches(isDisplayed()));
-        //perform a click on date textView to set date
-        onView(withId(R.id.txtView_date)).inRoot(isDialog()).check(matches(isDisplayed())).perform(click());
-        //check date dialog is is displayed with dialog title text
-        onView(withText("Sélectionner la date")).inRoot(isDialog()).check(matches(isDisplayed()));
-        //perform a click on positive button without select date
-        onView(withText("OK")).inRoot(isDialog()).perform(click());
-        //check if date dialog is reload with dialog title text
-        onView(withText("Sélectionner la date")).inRoot(isDialog()).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void ifTimeInTimeDialogIsNull_timeDialogShouldReload(){
-        //check if FAB is displayed
-        onView(allOf(withId(R.id.add_reunion_fab), childAtPosition(childAtPosition(
-                withId(android.R.id.content), 0), 2),
-                isDisplayed())).check(matches(isDisplayed()));
-        //perform a click on FAB
-        onView(allOf(withId(R.id.add_reunion_fab),
-                childAtPosition(childAtPosition(
-                        withId(android.R.id.content), 0), 2),
-                isDisplayed())).perform(click());
-        //check if create new reunion dialog is displayed with dialog title text
-        onView(withText("Ajoutez une réunion")).inRoot(isDialog()).check(matches(isDisplayed()));
-        //perform a click on time TextView to set time
+        //fill subject textView with String
+        onView(withId(R.id.subject_editText)).inRoot(isDialog())
+                .check(matches(isDisplayed())).perform(replaceText("Répète"));
+        // perform a click on textView to select time
         onView(withId(R.id.txtView_time)).inRoot(isDialog()).perform(click());
-        //check if time dialog is displayed with dialog title text
-        onView(withText("Sélectionner l'heure")).inRoot(isDialog()).check(matches(isDisplayed()));
-        //perform a click without select time
+        //set time
+        onView(withClassName(Matchers.equalTo(android.widget.TimePicker.class.getName()))).inRoot(isDialog())
+                .check(matches(isDisplayed())).perform(PickerActions.setTime(2, 10));
+        //perform click on positive button
         onView(withText("OK")).inRoot(isDialog()).perform(click());
-        //check if time dialog is reload with dialog title text
-        onView(withText("Sélectionner l'heure")).inRoot(isDialog()).check(matches(isDisplayed()));
+        //check if time textview matches with time string
+        onView(withId(R.id.txtView_time)).inRoot(isDialog())
+                .check(matches(isDisplayed())).check(matches(withText("2:10")));
+        //check if textview is displayed and perform a click on textview to set date
+        onView(withId(R.id.txtView_date)).inRoot(isDialog()).check(matches(isDisplayed())).perform(click());
+        // set date
+        onView(withClassName(Matchers.equalTo(android.widget.DatePicker.class.getName())))
+                .perform(PickerActions.setDate(2019, 10, 10));
+        //perform click on positive button
+        onView(withText("OK")).inRoot(isDialog()).perform(click());
+        //check if date textView is filled with selected date
+        onView(withId(R.id.txtView_date)).inRoot(isDialog())
+                .check(matches(isDisplayed())).check(matches(withText("10/10/2019")));
+        //set Reunion Place
+        onView(withId(R.id.place_Spinner)).perform(click());
+        onData(allOf(is(instanceOf(String.class)),
+                is("Sale 2"))).inRoot(isPlatformPopup()).perform(click());
+        //check if spinner selection equals to user selected place
+        onView(withId(R.id.place_Spinner)).check(matches(withSpinnerText(containsString("Sale 2"))));
+        //fill partipants textView with email String
+        onView(withId(R.id.participant_editText)).inRoot(isDialog())
+                .check(matches(isDisplayed())).perform(replaceText("marco"));
+        //perform a click on positive button and add reunion
+        onView(withText("Ajouter")).inRoot(isDialog()).perform(click());
+        //check if create new reunion dialog is reloaded
+        onView(withText("Ajoutez une réunion")).inRoot(isDialog()).check(matches(isDisplayed()));
+
     }
 
     private static Matcher<View> childAtPosition(

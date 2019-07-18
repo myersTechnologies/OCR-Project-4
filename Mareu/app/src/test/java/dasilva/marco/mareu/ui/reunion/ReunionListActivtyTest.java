@@ -1,5 +1,7 @@
 package dasilva.marco.mareu.ui.reunion;
 
+import android.util.Log;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +16,7 @@ import dasilva.marco.mareu.di.DI;
 import dasilva.marco.mareu.model.Reunion;
 import dasilva.marco.mareu.service.ReunionApiService;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -45,21 +48,19 @@ public class ReunionListActivtyTest {
     @Test
     public void sortItemsInRecycleViewByPlaceWithSuccess(){
         Reunion customReunion = new Reunion(Reunion.getRandomColorAvatar(), "02/09/2019",
-                "10h:30m", "Paris", "Jeu Vidéo", "Mario, Luigi, Bowser");
+                "10h:30m", "Salle 2", "Jeu Vidéo", "Mario, Luigi, Bowser");
         service.addReunion(customReunion);
-        service.setListReunionByPlace();
-        assertTrue(service.getReunions().get(0).getPlace().compareTo(
-                service.getReunions().get(1).getPlace()) >= 0);
+        reunionList =  service.setListReunionByPlace("Salle 2");
+        assertTrue(reunionList.contains(customReunion));
 
     }
     @Test
     public void sortItemsInRecyclerViewByDateWithSuccess(){
-        Reunion customReunion = new Reunion(Reunion.getRandomColorAvatar(), "02/09/2019",
+        Reunion customReunion = new Reunion(Reunion.getRandomColorAvatar(), "02/09/2031",
                 "10h:30m", "Paris", "Jeu Vidéo", "Mario, Luigi, Bowser");
-        reunionList.add(customReunion);
-        service.setListReunionByDate();
-        assertTrue(service.getReunions().get(1).getDate().compareTo(
-                service.getReunions().get(0).getDate()) >= 0);
+        service.addReunion(customReunion);
+        reunionList = service.setListReunionByDate("02/09/2031");
+        assertTrue(reunionList.contains(customReunion));
     }
     @Test
     public void whenDeletingReunion_itemIsNotDisplayedAnymore(){
