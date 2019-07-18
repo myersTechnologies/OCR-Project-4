@@ -18,6 +18,6 @@ public interface ReunionApiService {
 
     List<Reunion> setListReunionByPlace(String place);
 
-    String[] getSales();
+    String[] getSalles();
 
 }

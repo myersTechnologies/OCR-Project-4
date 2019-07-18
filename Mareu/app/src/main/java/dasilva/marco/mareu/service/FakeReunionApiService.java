@@ -19,7 +19,8 @@ public class FakeReunionApiService implements ReunionApiService {
     private List<Reunion> listOfReunions = new ArrayList<>();
     private Date date;
     private Date toCompare;
-    private static String[] sales = new String[]{"Sale 1", "Sale 2", "Sale 3", "Sale 4", "Sale 5", "Sale 6", "Sale 7", "Sale 8", "Sale 9", "Sale 10" };
+    private static String[] salles = new String[]{"Salle 1", "Salle 2", "Salle 3", "Salle 4", "Salle 5", "Salle 6", "Salle 7",
+            "Salle 8", "Salle 9", "Salle 10" };
 
     @Override
     public List<Reunion> getReunions() {
@@ -91,7 +92,7 @@ public class FakeReunionApiService implements ReunionApiService {
     }
 
     @Override
-    public String[] getSales() {
-        return sales;
+    public String[] getSalles() {
+        return salles;
     }
 }

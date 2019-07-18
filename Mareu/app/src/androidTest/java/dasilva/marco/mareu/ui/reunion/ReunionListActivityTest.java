@@ -136,9 +136,9 @@ public class ReunionListActivityTest {
         //set Reunion Place
         onView(withId(R.id.place_Spinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)),
-                is("Sale 2"))).inRoot(isPlatformPopup()).perform(click());
+                is("Salle 2"))).inRoot(isPlatformPopup()).perform(click());
         //check if spinner selection equals to user selected place
-        onView(withId(R.id.place_Spinner)).check(matches(withSpinnerText(containsString("Sale 2"))));
+        onView(withId(R.id.place_Spinner)).check(matches(withSpinnerText(containsString("Salle 2"))));
         //fill partipants textView with email String
         onView(withId(R.id.participant_editText)).inRoot(isDialog())
                 .check(matches(isDisplayed())).perform(replaceText("marco@lamzon.com"));
@@ -189,7 +189,7 @@ public class ReunionListActivityTest {
     }
 
     @Test
-    public void ifReunionParticipantsEmailDoesNotConatailsEmailChar_AddNewReunionDialogShouldReload(){
+    public void ifReunionParticipantsEmailDoesNotContainsEmailChar_AddNewReunionDialogShouldReload(){
         service.deleteReunion(reunion);
         //Check if floating action button exists
         onView(allOf(withId(R.id.add_reunion_fab), childAtPosition(childAtPosition(
@@ -228,9 +228,9 @@ public class ReunionListActivityTest {
         //set Reunion Place
         onView(withId(R.id.place_Spinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)),
-                is("Sale 2"))).inRoot(isPlatformPopup()).perform(click());
+                is("Salle 2"))).inRoot(isPlatformPopup()).perform(click());
         //check if spinner selection equals to user selected place
-        onView(withId(R.id.place_Spinner)).check(matches(withSpinnerText(containsString("Sale 2"))));
+        onView(withId(R.id.place_Spinner)).check(matches(withSpinnerText(containsString("Salle 2"))));
         //fill partipants textView with email String
         onView(withId(R.id.participant_editText)).inRoot(isDialog())
                 .check(matches(isDisplayed())).perform(replaceText("marco"));

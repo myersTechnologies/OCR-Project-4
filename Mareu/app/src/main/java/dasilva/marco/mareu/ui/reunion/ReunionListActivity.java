@@ -97,7 +97,7 @@ public class ReunionListActivity extends AppCompatActivity {
         View view = inflater.inflate(R.layout.place_spinner, null);
         final AlertDialog.Builder reunionPlaceDialog = new AlertDialog.Builder(this);
         placeChoice = (Spinner) view.findViewById(R.id.place_choice);
-        ArrayAdapter<String> spin_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, apiService.getSales());
+        ArrayAdapter<String> spin_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, apiService.getSalles());
         spin_adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         placeChoice.setAdapter(spin_adapter);
         reunionPlaceDialog.setView(view);

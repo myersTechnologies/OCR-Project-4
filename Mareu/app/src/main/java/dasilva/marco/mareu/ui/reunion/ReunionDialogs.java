@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +54,7 @@ public class ReunionDialogs {
         dateTextView = (TextView) view.findViewById(R.id.txtView_date);
         placeSpinner = (Spinner) view.findViewById(R.id.place_Spinner);
         participantEditText = (EditText) view.findViewById(R.id.participant_editText);
-        sales = apiService.getSales();
+        sales = apiService.getSalles();
         spin_adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, sales);
         spin_adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         placeSpinner.setAdapter(spin_adapter);

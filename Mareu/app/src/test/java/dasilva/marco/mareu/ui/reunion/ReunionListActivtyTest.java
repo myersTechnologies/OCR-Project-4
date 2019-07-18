@@ -1,13 +1,10 @@
 package dasilva.marco.mareu.ui.reunion;
 
-import android.util.Log;
+
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.List;
@@ -16,8 +13,6 @@ import dasilva.marco.mareu.di.DI;
 import dasilva.marco.mareu.model.Reunion;
 import dasilva.marco.mareu.service.ReunionApiService;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
