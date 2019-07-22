@@ -20,10 +20,7 @@ import java.util.List;
 
 public class ReunionListRecyclerViewAdapter extends RecyclerView.Adapter<ReunionListRecyclerViewAdapter.ViewHolder> {
 
-    private List<Reunion> reunionList;
-    private Reunion reunion;
-
-
+    private final List<Reunion> reunionList;
 
     public ReunionListRecyclerViewAdapter( List<Reunion> reunionList){
         this.reunionList = reunionList;
@@ -37,7 +34,7 @@ public class ReunionListRecyclerViewAdapter extends RecyclerView.Adapter<Reunion
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
-        reunion = reunionList.get(i);
+        final Reunion reunion = reunionList.get(i);
         viewHolder.reunionDescription.setText(reunion.getDescription());
         viewHolder.reunionDetails.setText(reunion.getParticipants());
         viewHolder.reunionAvatar.setImageResource(reunion.getColorAvatar());

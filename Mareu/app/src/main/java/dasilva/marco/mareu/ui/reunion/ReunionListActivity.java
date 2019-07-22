@@ -41,7 +41,6 @@ public class ReunionListActivity extends AppCompatActivity {
     private ReunionListRecyclerViewAdapter adapter;
     private ReunionDialogs reunionDialogs;
     private String date = null;
-    private String place = null;
     private Spinner placeChoice;
 
     @Override
@@ -62,10 +61,10 @@ public class ReunionListActivity extends AppCompatActivity {
         apiService = DI.getReunionApiService();
         setSupportActionBar(toolbar);
         reunionDialogs = new ReunionDialogs(this);
-        reunionList = apiService.getReunions();
     }
 
     private void initList(){
+        reunionList = apiService.getReunions();
         if (adapter == null){
         adapter = new ReunionListRecyclerViewAdapter(reunionList);
         recyclerView.setAdapter(adapter);
@@ -154,15 +153,14 @@ public class ReunionListActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void onDeleteReunion(DeleteReunionEvent event){
-        final Reunion deleteReunion = event.reunion;
+    public void onDeleteReunion(final DeleteReunionEvent event){
         AlertDialog.Builder deleteReunionDialog = new AlertDialog.Builder(this);
         deleteReunionDialog.setTitle("Êtes vous sûr de vouloir supprimer ?");
         deleteReunionDialog.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                apiService.deleteReunion(deleteReunion);
-                reunionList.remove(deleteReunion);
+                apiService.deleteReunion(event.reunion);
+                reunionList.remove(event.reunion);
                 initList();
             }
         });
