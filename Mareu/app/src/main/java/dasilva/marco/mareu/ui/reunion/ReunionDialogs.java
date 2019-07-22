@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+
 import java.util.Calendar;
 
 import dasilva.marco.mareu.R;
@@ -30,8 +31,8 @@ public class ReunionDialogs {
     private Spinner placeSpinner;
     private TextView timeTextView, dateTextView;
     private String subject, lieu, participants;
-    private String  date;
-    private String heure;
+    private String  date = "Date";
+    private String heure = "Heure";
     private ReunionApiService apiService;
     private String[] sales;
     private ArrayAdapter<String> spin_adapter;
@@ -120,33 +121,23 @@ public class ReunionDialogs {
         String[] email = participants.split(", ");
         int count = 0;
         for (String emailAdress : email) {
-            if (date != null && heure != null && !subject.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(emailAdress).matches()) {
+            if (Patterns.EMAIL_ADDRESS.matcher(emailAdress).matches()) {
                 count++;
             }
         }
-        if (count == email.length) {
+        if (date != "Date" && heure != "Heure" && !subject.isEmpty() && count == email.length) {
             Reunion reunion = new Reunion(Reunion.getRandomColorAvatar(), date, heure, lieu, subject, participants);
             apiService.addReunion(reunion);
             date = "Date";
             heure = "Heure";
         } else {
             Toast.makeText(context, "Veuillez remplir toutes les informations", Toast.LENGTH_SHORT).show();
-            createDialogToSetNewReunion();
-
-
             subjectEditText.setText(subject);
-            participantEditText.setText(participants);
-            if (dateTextView.getText() != "Date") {
-                dateTextView.setText(date);
-            } else{
-                dateTextView.setText("Date");
-            }
-            if (timeTextView.getText() != "Heure") {
-                timeTextView.setText(heure);
-            } else {
-                dateTextView.setText("Heure");
-            }
+            createDialogToSetNewReunion();
             placeSpinner.setSelection(spin_adapter.getPosition(lieu));
+            dateTextView.setText(date);
+            timeTextView.setText(heure);
+            participantEditText.setText(participants);
         }
     }
 

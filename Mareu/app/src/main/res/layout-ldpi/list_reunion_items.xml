@@ -45,7 +45,7 @@
         android:id="@+id/reunion_list_delete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="10dp"
         android:background="@null"
         app:layout_constraintBottom_toBottomOf="@+id/reunion_info_textView"
         app:layout_constraintEnd_toEndOf="parent"

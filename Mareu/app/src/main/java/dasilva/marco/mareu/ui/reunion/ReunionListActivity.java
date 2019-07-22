@@ -66,19 +66,19 @@ public class ReunionListActivity extends AppCompatActivity {
     }
 
     private void initList(){
+        if (adapter == null){
         adapter = new ReunionListRecyclerViewAdapter(reunionList);
         recyclerView.setAdapter(adapter);
+        } else {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     private void addReunion(){
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(reunionList.size() < 10) {
-                        reunionDialogs.createDialogToSetNewReunion();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Delete some reunions", Toast.LENGTH_LONG).show();
-                    }
+                    reunionDialogs.createDialogToSetNewReunion();
                     reunionList = apiService.getReunions();
                     initList();
                 }
