@@ -106,6 +106,8 @@ public class ReunionListActivtyTest {
                 "10h:30m", "Paris", "Jeu Vidéo", "Mario, Luigi, Bowser");
         service.addReunion(customReunion9);
         customReunion9.setPlace("Salle 1");
+        Reunion customReunion10 = new Reunion(Reunion.getRandomColorAvatar(), "11/09/2031",
+                "10h:30m", "Paris", "Jeu Vidéo", "Mario, Luigi, Bowser");
         int count = 0;
         for (Reunion reunion : reunions){
             if (reunion.getPlace().contains("Salle 1")){
@@ -113,7 +115,12 @@ public class ReunionListActivtyTest {
             }
         }
 
+        if (count < 10) {
+            service.addReunion(customReunion10);
+        }
+
         assertEquals(count, 10);
+        assertFalse(service.getReunions().contains(customReunion10));
 
     }
 }
