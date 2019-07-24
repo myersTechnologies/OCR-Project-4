@@ -61,16 +61,12 @@ public class ReunionListActivity extends AppCompatActivity {
         apiService = DI.getReunionApiService();
         setSupportActionBar(toolbar);
         reunionDialogs = new ReunionDialogs(this);
+        reunionList = apiService.getReunions();
     }
 
     private void initList(){
-        reunionList = apiService.getReunions();
-        if (adapter == null){
         adapter = new ReunionListRecyclerViewAdapter(reunionList);
         recyclerView.setAdapter(adapter);
-        } else {
-            adapter.notifyDataSetChanged();
-        }
     }
 
     private void addReunion(){

@@ -115,6 +115,7 @@ public class ReunionDialogs {
     }
 
     private void getNewReunion() {
+        String errorInDialog = null;
         subject = subjectEditText.getText().toString();
         lieu = placeSpinner.getSelectedItem().toString();
         participants = participantEditText.getText().toString();
@@ -131,7 +132,20 @@ public class ReunionDialogs {
             date = "Date";
             heure = "Heure";
         } else {
-            Toast.makeText(context, "Veuillez remplir toutes les informations", Toast.LENGTH_SHORT).show();
+            if (date == "Date") {
+                errorInDialog = "Date";
+            }
+            if (heure == "Heure"){
+                errorInDialog = "Heure";
+            }
+            if (subject.isEmpty()){
+                errorInDialog = "Sujet de la réunioon";
+            }
+            if (count != email.length){
+                errorInDialog = "Email";
+            }
+
+            Toast.makeText(context, "Veuillez remplir la case" + " " + errorInDialog, Toast.LENGTH_SHORT).show();
             subjectEditText.setText(subject);
             createDialogToSetNewReunion();
             placeSpinner.setSelection(spin_adapter.getPosition(lieu));

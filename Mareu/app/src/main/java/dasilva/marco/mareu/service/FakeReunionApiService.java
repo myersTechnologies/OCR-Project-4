@@ -45,7 +45,7 @@ public class FakeReunionApiService implements ReunionApiService {
         try {
             currentDate = formatter.parse(choiceDate);
         } catch (ParseException e) {
-            Log.d("Erros null", "CurrentDate");
+            Log.d("Error null", "CurrentDate");
         }
         for (Reunion reunion : listOfReunions){
             Date date = null;
