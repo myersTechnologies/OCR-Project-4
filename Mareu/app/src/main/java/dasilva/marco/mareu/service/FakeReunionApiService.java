@@ -8,8 +8,6 @@ import dasilva.marco.mareu.model.Reunion;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -17,8 +15,6 @@ import java.util.List;
 public class FakeReunionApiService implements ReunionApiService {
 
     private List<Reunion> listOfReunions = new ArrayList<>();
-    private Date date;
-    private Date toCompare;
     private static String[] salles = new String[]{"Salle 1", "Salle 2", "Salle 3", "Salle 4", "Salle 5", "Salle 6", "Salle 7",
             "Salle 8", "Salle 9", "Salle 10" };
 
@@ -59,10 +55,7 @@ public class FakeReunionApiService implements ReunionApiService {
                 reunionByDate.add(reunion);
             }
         }
-
-
        return reunionByDate;
-
     }
 
     @Override
