@@ -74,9 +74,10 @@ public class ReunionListActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    reunionDialogs.createDialogToSetNewReunion();
+                        reunionDialogs.createDialogToSetNewReunion();
                         reunionList = apiService.getReunions();
                         initList();
+
                 }
             });
     }

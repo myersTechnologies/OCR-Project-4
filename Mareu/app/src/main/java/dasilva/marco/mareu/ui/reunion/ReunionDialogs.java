@@ -128,11 +128,21 @@ public class ReunionDialogs {
             }
         }
         if (date != "Date" && heure != "Heure" && !subject.isEmpty() && count == email.length) {
-            Reunion reunion = new Reunion(Reunion.getRandomColorAvatar(), date, heure, lieu, subject, participants);
-            apiService.addReunion(reunion);
-            date = "Date";
-            heure = "Heure";
-            adapter.notifyDataSetChanged();
+            int countPlaces = 0;
+            for (Reunion reunion : apiService.getReunions()){
+                if (reunion.getPlace().contains(placeSpinner.getSelectedItem().toString())){
+                    countPlaces++;
+                }
+            }
+            if (countPlaces < 10) {
+                Reunion reunion = new Reunion(Reunion.getRandomColorAvatar(), date, heure, lieu, subject, participants);
+                apiService.addReunion(reunion);
+                date = "Date";
+                heure = "Heure";
+                adapter.notifyDataSetChanged();
+            } else {
+              maxReunionsDialog();
+            }
         } else {
             if (date == "Date") {
                 errorInDialog = "Date";
@@ -159,5 +169,20 @@ public class ReunionDialogs {
 
     public void setAdapter(ReunionListRecyclerViewAdapter adapter) {
         this.adapter = adapter;
+    }
+
+    public void maxReunionsDialog(){
+        final AlertDialog.Builder maxReunionDialog = new AlertDialog.Builder(context);
+        maxReunionDialog.setTitle("Capacité maximale atteinte !");
+        maxReunionDialog.setMessage("La salle a atteind sa capacité maximale, veuillez supprimer des reunions présentes dans la "
+                + lieu + " ou choisir une autre salle pour votre réunion.");
+        maxReunionDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+               dialogInterface.cancel();
+            }
+        });
+        maxReunionDialog.show();
+
     }
 }
