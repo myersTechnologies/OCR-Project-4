@@ -139,7 +139,7 @@ public class ReunionDialogs {
                 errorInDialog = "Heure";
             }
             if (subject.isEmpty()){
-                errorInDialog = "Sujet de la réunioon";
+                errorInDialog = "Sujet de la réunion";
             }
             if (count != email.length){
                 errorInDialog = "Email";
