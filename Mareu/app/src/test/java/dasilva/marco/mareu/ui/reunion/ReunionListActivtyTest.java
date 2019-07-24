@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dasilva.marco.mareu.di.DI;
@@ -52,11 +53,12 @@ public class ReunionListActivtyTest {
     }
     @Test
     public void sortItemsInRecyclerViewByDateWithSuccess(){
+        List<Reunion> reunionByDate = new ArrayList<>();
         Reunion customReunion = new Reunion(Reunion.getRandomColorAvatar(), "02/09/2031",
                 "10h:30m", "Paris", "Jeu Vidéo", "Mario, Luigi, Bowser");
         service.addReunion(customReunion);
-        reunionList = service.setListReunionByDate("02/09/2031");
-        assertTrue(reunionList.contains(customReunion));
+        reunionByDate = service.setListReunionByDate("02/09/2031");
+        assertTrue(reunionByDate.contains(customReunion));
     }
     @Test
     public void whenDeletingReunion_itemIsNotDisplayedAnymore(){
@@ -67,47 +69,37 @@ public class ReunionListActivtyTest {
     public void checkMaxReunions(){
         List<Reunion> reunions = service.getReunions();
         Reunion customReunion = new Reunion(Reunion.getRandomColorAvatar(), "02/09/2031",
-                "10h:30m", "Paris", "Jeu Vidéo", "Mario, Luigi, Bowser");
-        customReunion.setPlace("Salle 1");
+                "10h:30m", "Salle 1", "Jeu Vidéo", "Mario, Luigi, Bowser");
         service.addReunion(customReunion);
         Reunion customReunion1 = new Reunion(Reunion.getRandomColorAvatar(), "10/09/2031",
-                "10h:30m", "Paris", "Jeu Vidéo", "Mario, Luigi, Bowser");
+                "10h:30m", "Salle 1", "Jeu Vidéo", "Mario, Luigi, Bowser");
         service.addReunion(customReunion1);
-        customReunion1.setPlace("Salle 1");
         Reunion customReunion2 = new Reunion(Reunion.getRandomColorAvatar(), "09/09/2031",
-                "10h:30m", "Paris", "Jeu Vidéo", "Mario, Luigi, Bowser");
+                "10h:30m", "Salle 1", "Jeu Vidéo", "Mario, Luigi, Bowser");
         service.addReunion(customReunion2);
-        customReunion2.setPlace("Salle 1");
         Reunion customReunion3 = new Reunion(Reunion.getRandomColorAvatar(), "08/09/2031",
-                "10h:30m", "Paris", "Jeu Vidéo", "Mario, Luigi, Bowser");
+                "10h:30m", "Salle 1", "Jeu Vidéo", "Mario, Luigi, Bowser");
         service.addReunion(customReunion3);
-        customReunion3.setPlace("Salle 1");
         Reunion customReunion4 = new Reunion(Reunion.getRandomColorAvatar(), "07/09/2031",
-                "10h:30m", "Paris", "Jeu Vidéo", "Mario, Luigi, Bowser");
+                "10h:30m", "Salle 1", "Jeu Vidéo", "Mario, Luigi, Bowser");
         service.addReunion(customReunion4);
-        customReunion4.setPlace("Salle 1");
         Reunion customReunion5 = new Reunion(Reunion.getRandomColorAvatar(), "06/09/2031",
-                "10h:30m", "Paris", "Jeu Vidéo", "Mario, Luigi, Bowser");
+                "10h:30m", "Salle 1", "Jeu Vidéo", "Mario, Luigi, Bowser");
         service.addReunion(customReunion5);
-        customReunion5.setPlace("Salle 1");
         Reunion customReunion6 = new Reunion(Reunion.getRandomColorAvatar(), "05/09/2031",
-                "10h:30m", "Paris", "Jeu Vidéo", "Mario, Luigi, Bowser");
+                "10h:30m", "Salle 1", "Jeu Vidéo", "Mario, Luigi, Bowser");
         service.addReunion(customReunion6);
-        customReunion6.setPlace("Salle 1");
         Reunion customReunion7 = new Reunion(Reunion.getRandomColorAvatar(), "04/09/2031",
-                "10h:30m", "Paris", "Jeu Vidéo", "Mario, Luigi, Bowser");
+                "10h:30m", "Salle 1", "Jeu Vidéo", "Mario, Luigi, Bowser");
         service.addReunion(customReunion7);
-        customReunion7.setPlace("Salle 1");
         Reunion customReunion8 = new Reunion(Reunion.getRandomColorAvatar(), "03/09/2031",
-                "10h:30m", "Paris", "Jeu Vidéo", "Mario, Luigi, Bowser");
+                "10h:30m", "Salle 1", "Jeu Vidéo", "Mario, Luigi, Bowser");
         service.addReunion(customReunion8);
-        customReunion8.setPlace("Salle 1");
         Reunion customReunion9 = new Reunion(Reunion.getRandomColorAvatar(), "01/09/2031",
-                "10h:30m", "Paris", "Jeu Vidéo", "Mario, Luigi, Bowser");
+                "10h:30m", "Salle 1", "Jeu Vidéo", "Mario, Luigi, Bowser");
         service.addReunion(customReunion9);
-        customReunion9.setPlace("Salle 1");
         Reunion customReunion10 = new Reunion(Reunion.getRandomColorAvatar(), "11/09/2031",
-                "10h:30m", "Paris", "Jeu Vidéo", "Mario, Luigi, Bowser");
+                "10h:30m", "Salle 1", "Jeu Vidéo", "Mario, Luigi, Bowser");
         int count = 0;
         for (Reunion reunion : reunions){
             if (reunion.getPlace().contains("Salle 1")){

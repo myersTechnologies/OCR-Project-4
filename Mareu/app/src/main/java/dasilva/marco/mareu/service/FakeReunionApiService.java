@@ -60,21 +60,6 @@ public class FakeReunionApiService implements ReunionApiService {
             }
         }
 
-        Comparator<Reunion> dateComparator = new Comparator<Reunion>() {
-            @Override
-            public int compare(Reunion o1, Reunion o2) {
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                SimpleDateFormat compare = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                try {
-                    date = format.parse(o1.getDate() + " " + o1.getTime());
-                    toCompare = compare.parse(o2.getDate() + " " + o1.getTime());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                return date.compareTo(toCompare);
-            }
-        };
-        Collections.sort(reunionByDate, dateComparator);
 
        return reunionByDate;
 
