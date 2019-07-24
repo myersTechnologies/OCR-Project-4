@@ -66,6 +66,7 @@ public class ReunionListActivity extends AppCompatActivity {
 
     private void initList(){
         adapter = new ReunionListRecyclerViewAdapter(reunionList);
+        reunionDialogs.setAdapter(adapter);
         recyclerView.setAdapter(adapter);
     }
 
@@ -74,8 +75,8 @@ public class ReunionListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     reunionDialogs.createDialogToSetNewReunion();
-                    reunionList = apiService.getReunions();
-                    initList();
+                        reunionList = apiService.getReunions();
+                        initList();
                 }
             });
     }

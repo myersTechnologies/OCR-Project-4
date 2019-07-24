@@ -38,6 +38,7 @@ public class ReunionDialogs {
     private ArrayAdapter<String> spin_adapter;
     private  DatePickerDialog datePickerDialog;
     private  TimePickerDialog timePickerDialog;
+    private ReunionListRecyclerViewAdapter adapter;
 
     public ReunionDialogs(Context context){
         this.context = context;
@@ -131,6 +132,7 @@ public class ReunionDialogs {
             apiService.addReunion(reunion);
             date = "Date";
             heure = "Heure";
+            adapter.notifyDataSetChanged();
         } else {
             if (date == "Date") {
                 errorInDialog = "Date";
@@ -146,8 +148,8 @@ public class ReunionDialogs {
             }
 
             Toast.makeText(context, "Veuillez remplir la case" + " " + errorInDialog, Toast.LENGTH_SHORT).show();
-            subjectEditText.setText(subject);
             createDialogToSetNewReunion();
+            subjectEditText.setText(subject);
             placeSpinner.setSelection(spin_adapter.getPosition(lieu));
             dateTextView.setText(date);
             timeTextView.setText(heure);
@@ -155,4 +157,7 @@ public class ReunionDialogs {
         }
     }
 
+    public void setAdapter(ReunionListRecyclerViewAdapter adapter) {
+        this.adapter = adapter;
+    }
 }
